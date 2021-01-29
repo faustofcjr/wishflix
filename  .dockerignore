@@ -1,0 +1,5 @@
+node_modules
+.api-request
+.git
+.github
+.gitignore

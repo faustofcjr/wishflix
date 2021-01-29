@@ -1,0 +1,9 @@
+@import 'commons/variables.scss';
+
+html, body { 
+    background-color: $primary-color;
+}
+
+.header {
+    background-color: $secondary-color;
+}
