@@ -7,6 +7,7 @@ import './registerServiceWorker'
 
 import './plugins/axios'
 import './plugins/bootstrap-vue'
+import './plugins/firebase'
 import './plugins/fontawesome'
 
 
@@ -15,6 +16,16 @@ import store from './store'
 import i18n from './i18n'
 
 Vue.config.productionTip = false
+
+
+Vue.prototype.$toast = function (title, message, variant) {
+  this.$root.$bvToast.toast(message, {
+    title: title,
+    variant: variant,
+    solid: true,
+    toaster: 'b-toaster-top-right',
+  });
+}
 
 new Vue({
   router,

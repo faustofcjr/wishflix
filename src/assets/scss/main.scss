@@ -1,6 +1,7 @@
 @import 'commons/variables.scss';
 
-html, body { 
+html, body {
+    height: 100%;
     background-color: $primary-color;
 }
 
@@ -9,7 +10,9 @@ content {
 }
 
 header {
-    background-color: $secondary-color;
+    .header-navbar {
+        background-color: $secondary-color;
+    }
 }
 
 footer {
@@ -27,4 +30,48 @@ footer {
 
 .required:after {
     content:" *";
+}
+
+/** Form **/
+.form-account {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 15px;
+    width: 100%;
+
+    h2 {
+        text-align: center; 
+    }
+
+    .form-control {
+        box-sizing: border-box;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        position: relative;
+    }
+    .form-control:focus {
+        z-index: 2;
+    }
+    input[type="email"] {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-bottom: -1px;
+    }
+    input[type="password"] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/** transition and animation **/
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
