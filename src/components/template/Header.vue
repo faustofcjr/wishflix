@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="navbar header navbar-dark  shadow-sm">
+    <div class="navbar navbar-dark  shadow-sm">
       <div class="container">
         
         <router-link to="/" class="navbar-brand d-flex align-items-center">

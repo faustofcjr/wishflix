@@ -1,5 +1,17 @@
 {
+  "submit": "Submit",
+  "cancel": "Cancel",
   "app_name": "Wishflix",
+  "app_proposition": "This is the beginning of a beautiful friendship.",
+  "birthday": "Birthday",
   "create_an_account": "Create an Account",
-  "app_proposition": "This is the beginning of a beautiful friendship."
+  "email": "Email",
+  "main_profile": "Main Profile",
+  "name": "Name",
+  "password": "Password",
+  "profile": "Profile",
+  "select_genre": "Select Genre",
+  "sign_in": "Sign in",
+  "sign_up": "Sign up",
+  "tmdb-use-terms": "TMDb is the source of movies data and/or images listed here."
 }

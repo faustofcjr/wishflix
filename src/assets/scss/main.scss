@@ -4,6 +4,27 @@ html, body {
     background-color: $primary-color;
 }
 
-.header {
+content {
+    background-color: $primary-color;
+}
+
+header {
     background-color: $secondary-color;
+}
+
+footer {
+    background-color: $secondary-color;
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
+    a, p {
+        color: $tertiary-color;
+    }
+
+}
+
+.required:after {
+    content:" *";
 }

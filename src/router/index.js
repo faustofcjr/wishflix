@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Catalog from '../views/movies/Catalog'
+
+const Catalog = () => import(/* webpackChunkName: "users" */'@/views/movies/Catalog')
+const SignUp = () => import(/* webpackChunkName: "users" */'@/views/users/SignUp')
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Catalog',
-    component: Catalog
-  },
+  { path: '/', name: 'catalog', component: Catalog },
+  { path: '/user/signup', name: 'signup', component: SignUp },
   // {
   //   path: '/about',
   //   name: 'About',
