@@ -135,7 +135,7 @@ export default {
             email: this.form.email,
             name: this.form.name,
             birthday: this.form.birthday,
-            profiles: [{ key: 1, name: this.form.name, main: true }],
+            profiles: [{ uid: this.$uuid.v4(), name: this.form.name, main: true }],
           };
 
           this.$firebase

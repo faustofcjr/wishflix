@@ -13,6 +13,7 @@
       >
         <b-button
           :variant="profile.main ? 'outline-primary' : 'outline-success'"
+          @click="selectProfile(profile)"
         >
           <font-awesome-icon icon="user" size="7x" />
         </b-button>
@@ -44,7 +45,7 @@
         @hidden="resetFormModal"
         @ok="handleFormOk"
       >
-        <form ref="form" @submit.stop.prevent="handleSubmit">
+        <form ref="form" @submit.stop.prevent="handleFormOk">
           <b-form-group :label="$t('name')" label-for="name-input">
             <b-form-input
               id="name-input"
@@ -68,11 +69,7 @@ export default {
     },
     checkFormValidity() {
       const name = this.form.name;
-      const found = this.profiles.find(
-        (profile) => profile.name.toLowerCase() === name.toLowerCase()
-      );
-
-      return name.length > 0 && !found;
+      return name.length > 0 && this.isValidName(name);
     },
   },
   data() {
@@ -83,16 +80,30 @@ export default {
     };
   },
   methods: {
+    selectProfile(profile) {
+      localStorage.setItem("profile", JSON.stringify(profile));
+      this.$router.push({ name: "movies-catalog" });
+    },
     resetFormModal() {
       this.form.name = "";
     },
     handleFormOk(bvModalEvt) {
       bvModalEvt.preventDefault();
-      this.addProfile();
+      const name = this.form.name;
+
+      if (this.isValidName(name)) {
+        this.addProfile();
+      }
+    },
+    isValidName(name) {
+      const found = this.profiles.find(
+        (profile) => profile.name.toLowerCase() === name.toLowerCase()
+      );
+      return !found;
     },
     addProfile() {
       let newOne = {
-        key: this.profiles.length + 1,
+        uid: this.$uuid.v4(),
         name: this.form.name,
         main: false,
       };
@@ -137,9 +148,9 @@ export default {
         .then(() => {
           var index = this.profiles
             .map((p) => {
-              return p.id;
+              return p.uid;
             })
-            .indexOf(profile.id);
+            .indexOf(profile.uid);
           this.profiles.splice(index, 1);
         })
         .catch(() =>

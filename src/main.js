@@ -9,7 +9,7 @@ import './plugins/axios'
 import './plugins/bootstrap-vue'
 import './plugins/firebase'
 import './plugins/fontawesome'
-
+import './plugins/uuid-vue'
 
 import router from './router'
 import store from './store'
