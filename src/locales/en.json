@@ -1,8 +1,8 @@
 {
-  
-  "qst_cancel_registration_modal": "Are you sure you want to cancel registration?",
-  "yes": "Yes",
-  "no": "No",
+  "new_profile": "New Profile",
+  "msg_error_listing_profiles": "An unexpected error occurred while listing profiles.",
+  "msg_error_adding_profiles": "An unexpected error occurred while adding profile.",
+  "msg.choose.profile": "Choose one profile to browse a movie list personalized.",
   "app_name": "Wishflix",
   "app_proposition": "This is the beginning of a beautiful friendship.",
   "birthday": "Birthday",
@@ -23,10 +23,12 @@
   "msg_user_wrong_email": "There is no user record corresponding to email.",
   "msg_user_wrong_password": "The password is invalid.",
   "name": "Name",
+  "no": "No",
   "password_minimum_six_characters": "Password (Min. 6)",
   "password": "Password",
   "portuguese": "Portuguese",
   "profile": "Profile",
+  "qst_cancel_registration_modal": "Are you sure you want to cancel registration?",
   "register": "Register",
   "search": "Search",
   "select_genre": "Select Genre",
@@ -36,5 +38,6 @@
   "submit": "Submit",
   "success": "Success",
   "tmdb-use-terms": "TMDb is the source of movies data and/or images listed here.",
-  "warning": "Warning"
+  "warning": "Warning",
+  "yes": "Yes"
 }

@@ -20,5 +20,13 @@ Vue.prototype.$firebase = firebase
 
 firebase.initializeApp(config)
 
+firebase.getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+            unsubscribe();
+            resolve(user);
+        }, reject);
+    })
+};
 
-// export default Firebase
+export default firebase;

@@ -1,8 +1,8 @@
 {
-
-  "qst_cancel_registration_modal": "Você tem certeza que deseja cancelar o cadastro?",
-  "yes": "Sim",
-  "no": "Não",
+  "new_profile": "Novo Perfil",
+  "msg_error_listing_profiles": "Ocorreu um erro inesperado ao listar os perfis.",
+  "msg_error_adding_profiles": "Ocorreu um erro inesperado ao adicionar perfil.",
+  "msg.choose.profile": "Escolha um perfil para navegar na lista de filmes personalizada.",
   "app_name": "Wishflix",
   "app_proposition": "Este é o começo de uma bela amizade.",
   "birthday": "Data de Nascimento",
@@ -23,10 +23,12 @@
   "msg_user_wrong_email": "Não há registro de usuário correspondente ao email.",
   "msg_user_wrong_password": "A senha inválida.",
   "name": "Nome",
+  "no": "Não",
   "password_minimum_six_characters": "Senha (Min. 6)",
   "password": "Senha",
   "portuguese": "Português",
   "profile": "Perfil",
+  "qst_cancel_registration_modal": "Você tem certeza que deseja cancelar o cadastro?",
   "register": "Cadastrar",
   "search": "Buscar",
   "select_genre": "Selecione o Gênero",
@@ -36,5 +38,6 @@
   "submit": "Submeter",
   "success": "Sucesso",
   "tmdb-use-terms": "TMDb é a fonte dos dados e/ou imagens dos filmes listados aqui.",
-  "warning": "Atenção"
+  "warning": "Atenção",
+  "yes": "Sim"
 }

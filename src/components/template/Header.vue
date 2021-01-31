@@ -38,11 +38,7 @@
             <template #button-content>
               <em>User</em>
             </template>
-            <b-dropdown-item @click="goProfile()">
-              <font-awesome-icon icon="user" class="mr-1" />
-              {{ $t("profile") }}
-            </b-dropdown-item>
-            <b-dropdown-item href="#">
+            <b-dropdown-item @click="signOut()">
               <font-awesome-icon icon="sign-out-alt" class="mr-1" />
               {{ $t("sign_out") }}
             </b-dropdown-item>
@@ -50,41 +46,6 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <!-- <div class="collapse bg-dark" id="navbarHeader">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-4 offset-md-1 py-4">
-            <ul class="list-unstyled">
-              <li><a href="#" class="text-white">Follow on Twitter</a></li>
-              <li><a href="#" class="text-white">Like on Facebook</a></li>
-              <li><a href="#" class="text-white">Email me</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="navbar navbar-dark  shadow-sm">
-      <div class="container">
-        
-        <router-link to="/" class="navbar-brand d-flex align-items-center">
-          <font-awesome-icon icon="film" class="mr-2"/>
-          <strong>{{ $t("app_name") }} </strong>
-        </router-link>
-
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarHeader"
-          aria-controls="navbarHeader"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-    </div> -->
   </header>
 </template>
 
@@ -102,6 +63,17 @@ export default {
   methods: {
     changeLanguage(key) {
       console.log(key);
+    },
+    signOut() {
+      this.$firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          console.log("Logout successfully");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
