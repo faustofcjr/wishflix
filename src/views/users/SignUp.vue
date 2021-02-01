@@ -1,7 +1,6 @@
 <template>
   <div id="signup" class="form-account">
     <h1 class="h3 mb-4">
-      <font-awesome-icon icon="user-plus" />
       {{ $t("sign_up") }}
     </h1>
 
@@ -135,7 +134,9 @@ export default {
             email: this.form.email,
             name: this.form.name,
             birthday: this.form.birthday,
-            profiles: [{ uid: this.$uuid.v4(), name: this.form.name, main: true }],
+            profiles: [
+              { uid: this.$uuid.v4(), name: this.form.name, main: true },
+            ],
           };
 
           this.$firebase

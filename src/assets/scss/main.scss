@@ -2,7 +2,6 @@
 
 html, body {
     height: 100%;
-    background-color: $primary-color;
 }
 
 content {
@@ -15,15 +14,22 @@ header {
     }
 }
 
-footer {
-    background-color: $secondary-color;
-
+.footer {
+    background-color: $tertiary-color;
+    bottom:0;
+    height: 35px;
+    padding: 5px 15px;
+    position:fixed;
+    text-align: right;
+    width:100%;
     img {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
     }
     a, p {
-        color: $tertiary-color;
+        color: $secondary-color;
+        font-size: 13px;
+        text-align: right;
     }
 
 }
@@ -85,4 +91,14 @@ footer {
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
+}
+
+@media (max-width: 575px) { 
+    .footer {
+        a, p {
+            color: $secondary-color;
+            font-size: 10px;
+        }
+    
+    }  
 }
