@@ -2,7 +2,7 @@
   <div id="profile" class="profile">
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
       <h1 class="display-4">{{ $t("app_name") }}</h1>
-      <p class="lead">{{ $t("msg.choose.profile") }}</p>
+      <p class="lead">{{ $t("msg_choose_profile") }}</p>
     </div>
 
     <div class="row mb-5 mt-5">

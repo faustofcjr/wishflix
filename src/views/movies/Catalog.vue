@@ -29,7 +29,57 @@
     <div>
       <b-container fluid>
         <b-row>
-          <b-col>
+          <b-col cols="9">
+            <b-tabs content-class="mt-3">
+              <b-tab id="most_watched" :title="$t('most_watched')" active>
+                <b-row>
+                  <b-col
+                    v-for="movie of movies"
+                    :key="movie.id"
+                    cols="3"
+                    class="mb-3"
+                  >
+                    <MovieDetail :movie="movie" />
+                  </b-col>
+                </b-row>
+              </b-tab>
+
+              <b-tab :title="$t('watchlist')" @click="getWatchlist()">
+                <b-row>
+                  <b-col
+                    v-for="wl of watchlist"
+                    :key="wl.movie.id"
+                    cols="3"
+                    class="mb-3"
+                  >
+                    <MovieDetail
+                      :movie="wl.movie"
+                      :watched="wl.watched"
+                      :watchlistId="wl.id"
+                    />
+                  </b-col>
+                </b-row>
+              </b-tab>
+
+              <b-tab :title="$t('watched')" @click="getWatched()">
+                <b-row>
+                  <b-col
+                    v-for="wl of watched"
+                    :key="wl.movie.id"
+                    cols="3"
+                    class="mb-3"
+                  >
+                    <MovieDetail
+                      :movie="wl.movie"
+                      :watched="wl.watched"
+                      :watchlistId="wl.id"
+                    />
+                  </b-col> </b-row
+              ></b-tab>
+            </b-tabs>
+          </b-col>
+
+          <!-- <b-col>
             <b-form-select v-model="selectedGenre">
               <b-form-select-option :value="null">
                 {{ $t("select_genre") }}
@@ -43,22 +93,8 @@
                 {{ genre.name }}
               </b-form-select-option>
             </b-form-select>
-          </b-col>
-
-          <b-col cols="9">
-            <b-row>
-              <b-col
-                v-for="movie of movies"
-                :key="movie.key"
-                cols="3"
-                class="mb-3"
-              >
-                <MovieDetail :movie="movie" />
-              </b-col>
-            </b-row>
-          </b-col>
+          </b-col> -->
         </b-row>
-        <b-button @click="listMore()">Button</b-button>
       </b-container>
     </div>
   </main>
@@ -76,11 +112,43 @@ export default {
       currentUser: null,
       page: 1,
       selectedGenre: null,
+      watchlist: [],
+      watched: [],
       movies: [],
       genres: [],
     };
   },
   methods: {
+    getWatchlist() {
+      return this.$firebase
+        .firestore()
+        .collection("watchlist")
+        .where("watched", "==", false)
+        .get()
+        .then((snapshot) => {
+          this.watchlist = [];
+          snapshot.docs.forEach((doc) => {
+            this.watchlist.push({ id: doc.id, ...doc.data() });
+          });
+        })
+        .catch((error) => console.log(error));
+    },
+
+    getWatched() {
+      return this.$firebase
+        .firestore()
+        .collection("watchlist")
+        .where("watched", "==", true)
+        .get()
+        .then((snapshot) => {
+          this.watched = [];
+          snapshot.docs.forEach((doc) => {
+            this.watched.push({ id: doc.id, ...doc.data() });
+          });
+        })
+        .catch((error) => console.log(error));
+    },
+
     listGenres() {
       // /genre/movie/list
       this.$http
