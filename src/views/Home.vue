@@ -10,11 +10,16 @@
           <p>
             <router-link
               :to="{ name: 'signup' }"
-              class="btn btn-primary my-2 mr-2"
+              class="btn btn-primary mr-2"
             >
               {{ $t("create_an_account") }}
             </router-link>
-            <router-link :to="{ name: 'signin' }" class="btn btn-success my-2">
+
+            <router-link :to="{ name: 'signin' }" class="btn btn-success mr-2" >
+              {{ $t("i_have_account") }}
+            </router-link>
+
+              <router-link :to="{ name: 'signin' }" class="btn btn-success mr-2" >
               {{ $t("i_have_account") }}
             </router-link>
           </p>

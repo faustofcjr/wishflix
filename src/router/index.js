@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import firebase from './../plugins/firebase'
-import Home from '@/views/Home'
 
 const Catalog = () => import(/* webpackChunkName: "movies" */'@/views/movies/Catalog')
 const SignUp = () => import(/* webpackChunkName: "users" */'@/views/users/SignUp')
@@ -11,12 +10,11 @@ const Profile = () => import(/* webpackChunkName: "users" */'@/views/users/Profi
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', name: 'home', component: Home },
   { path: '/movies/catalog', name: 'movies-catalog', component: Catalog, meta: { requiresAuth: true } },
   { path: '/user/signup', name: 'signup', component: SignUp },
   { path: '/user/signin', name: 'signin', component: SignIn },
   { path: '/user/profile', name: 'user-profile', component: Profile, meta: { requiresAuth: true } },
-  { path: '*', redirect: '/' }
+  { path: '*', redirect: {name: 'movies-catalog'} }
 ]
 
 const router = new VueRouter({
@@ -30,7 +28,7 @@ router.beforeEach(async (to, from, next) => {
   const currentUser = await firebase.getCurrentUser()
 
   if (requiresAuth && !currentUser) {
-    next({ name: 'home' })
+    next({ name: 'signin' })
   } else {
     next()
   }
