@@ -13,14 +13,14 @@ axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8
 Vue.prototype.$http = axios
 
 let config = {
-  // baseURL: process.env.baseURL || process.env.VUE_APP_API_URL || "",
-  timeout: 15 * 1000, // Timeout
+  baseURL: process.env.baseURL || process.env.VUE_APP_API_URL || "",
+  timeout: 15 * 1000,
   // withCredentials: true // Check cross-site Access-Control
 };
 
 const _axios = axios.create(config);
 
-_axios.interceptors.request.use(function (config) {
+_axios.interceptors.request.use(config => {
   console.log(config.method)
   console.log(process.env.VUE_APP_API_VERSION)
   console.log(process.env.VUE_APP_API_KEY)

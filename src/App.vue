@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import Header from "@/components/template/Header";
 import Content from "@/components/template/Content";
 import Footer from "@/components/template/Footer";
@@ -17,6 +18,13 @@ export default {
     Header,
     Content,
     Footer,
+  },
+  methods: {
+    ...mapActions(["getCurrentUser", "getCurrentLanguage"]),
+  },
+  mounted() {
+    this.$store.dispatch("getCurrentUser");
+    this.$store.dispatch("changeLanguage");
   },
 };
 </script>

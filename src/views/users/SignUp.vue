@@ -112,6 +112,7 @@ export default {
         return;
       }
 
+      this.$loading(true);
       this.getByValue("email", this.form.email)
         .then((response) => {
           const documents = response.docs.map((doc) => doc.data());
@@ -122,7 +123,7 @@ export default {
             this.$toast(this.$t("error"), message, "danger");
           }
         })
-        .catch(() => this.showUnexpectedMessage());
+        .finally(() => this.$loading(false));
     },
     create() {
       this.$firebase
@@ -143,7 +144,14 @@ export default {
             .firestore()
             .collection("users")
             .add(user)
-            .then(() => this.$router.push({ name: "signin" }))
+            .then(() => {
+              this.$toast(
+                this.$t("success"),
+                this.$t("msg_account_successfully_create"),
+                "success"
+              );
+              this.$router.push({ name: "user-profile" });
+            })
             .catch(() => this.showUnexpectedMessage());
         })
         .catch(() => this.showUnexpectedMessage());

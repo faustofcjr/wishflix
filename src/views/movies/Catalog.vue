@@ -1,85 +1,39 @@
 <template>
-  <main>
-    <section
-      id="create-account"
-      class="py-5 text-center container"
-      v-if="!currentUser"
-    >
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light">{{ $t("app_name") }}</h1>
-          <p class="lead text-muted">
-            {{ $t("app_proposition") }}
-          </p>
-          <p>
-            <router-link
-              :to="{ name: 'signup' }"
-              class="btn btn-primary my-2 mr-2"
-            >
-              {{ $t("create_an_account") }}
-            </router-link>
-            <router-link :to="{ name: 'signin' }" class="btn btn-success my-2">
-              {{ $t("i_have_account") }}
-            </router-link>
-          </p>
+  <b-container fluid>
+    <b-row>
+      <b-col cols="12">
+        <div id="search">
+          <b-form-input
+            v-model="searchTerm"
+            :placeholder="$t('find_movie')"
+          ></b-form-input>
         </div>
-      </div>
-    </section>
 
-    <div>
-      <b-container fluid>
-        <b-row>
-          <b-col cols="9">
-            <b-tabs content-class="mt-3">
-              <b-tab id="most_watched" :title="$t('most_watched')" active>
-                <b-row>
-                  <b-col
-                    v-for="movie of movies"
-                    :key="movie.id"
-                    cols="3"
-                    class="mb-3"
-                  >
-                    <MovieDetail :movie="movie" />
-                  </b-col>
-                </b-row>
-              </b-tab>
+        <b-tabs content-class="mt-1">
+          <b-tab id="most_watched" :title="$t('most_watched')" active>
+            <b-row>
+              <b-col
+                v-for="movie of movies"
+                :key="movie.id"
+                cols="3"
+                class="mb-5 d-flex align-items-stretch"
+              >
+                <MovieDetail :movie="movie" />
+              </b-col>
+            </b-row>
+          </b-tab>
 
-              <b-tab :title="$t('watchlist')" @click="getWatchlist()">
-                <b-row>
-                  <b-col
-                    v-for="wl of watchlist"
-                    :key="wl.movie.id"
-                    cols="3"
-                    class="mb-3"
-                  >
-                    <MovieDetail
-                      :movie="wl.movie"
-                      :watched="wl.watched"
-                      :watchlistId="wl.id"
-                    />
-                  </b-col>
-                </b-row>
-              </b-tab>
+          <b-tab :title="$t('watchlist')">
+            <Watchlist />
+          </b-tab>
 
-              <b-tab :title="$t('watched')" @click="getWatched()">
-                <b-row>
-                  <b-col
-                    v-for="wl of watched"
-                    :key="wl.movie.id"
-                    cols="3"
-                    class="mb-3"
-                  >
-                    <MovieDetail
-                      :movie="wl.movie"
-                      :watched="wl.watched"
-                      :watchlistId="wl.id"
-                    />
-                  </b-col> </b-row
-              ></b-tab>
-            </b-tabs>
-          </b-col>
+          <b-tab :title="$t('watched')">
+            <Watchlist :watched="true" />
+          </b-tab>
+        </b-tabs>
+      </b-col>
 
-          <!-- <b-col>
+      <!-- <b-col>
             <b-form-select v-model="selectedGenre">
               <b-form-select-option :value="null">
                 {{ $t("select_genre") }}
@@ -94,121 +48,92 @@
               </b-form-select-option>
             </b-form-select>
           </b-col> -->
-        </b-row>
-      </b-container>
-    </div>
-  </main>
+      <!--<b-nav-form>
+             <b-form-input
+              size="sm"
+              class="mr-sm-2"
+              :placeholder="$t('find_movie')"
+            >
+            </b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">
+              {{ $t("search") }}
+            </b-button>
+          </b-nav-form> -->
+    </b-row>
+  </b-container>
 </template>
 
 <script>
+import { debounce } from "lodash";
 import MovieDetail from "@/components/MovieDetail";
+import Watchlist from "./Watchlist";
+import { mapGetters } from "vuex";
+
 export default {
   name: "Catalog",
   components: {
     MovieDetail,
+    Watchlist,
+  },
+  computed: {
+    ...mapGetters(["profile"]),
+  },
+  watch: {
+    searchTerm(term) {
+      if (term.trim().length > 0) {
+        this.debounceSearch();
+      }
+    },
   },
   data() {
     return {
-      currentUser: null,
       page: 1,
-      selectedGenre: null,
-      watchlist: [],
-      watched: [],
       movies: [],
-      genres: [],
+      searchTerm: "",
     };
   },
   methods: {
-    getWatchlist() {
-      return this.$firebase
-        .firestore()
-        .collection("watchlist")
-        .where("watched", "==", false)
-        .get()
-        .then((snapshot) => {
-          this.watchlist = [];
-          snapshot.docs.forEach((doc) => {
-            this.watchlist.push({ id: doc.id, ...doc.data() });
-          });
-        })
-        .catch((error) => console.log(error));
-    },
-
-    getWatched() {
-      return this.$firebase
-        .firestore()
-        .collection("watchlist")
-        .where("watched", "==", true)
-        .get()
-        .then((snapshot) => {
-          this.watched = [];
-          snapshot.docs.forEach((doc) => {
-            this.watched.push({ id: doc.id, ...doc.data() });
-          });
-        })
-        .catch((error) => console.log(error));
-    },
-
-    listGenres() {
-      // /genre/movie/list
-      this.$http
-        .get(
-          "https://api.themoviedb.org/3/genre/movie/list?api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR"
-        )
-        .then((response) => {
-          this.genres = response.data.genres;
-        })
-        .catch(
-          (error) => console.log(error)
-          // this.$bzToast(
-          //   this.$t("error"),
-          //   this.$t("msg_error_list_registers"),
-          //   "danger"
-          // )
-        );
-    },
     listMovies() {
-      // movie/popular
+      this.$loading(true);
+      //  '/movie/popular')
       this.$http
         .get(
           `https://api.themoviedb.org/3/movie/popular?page=${this.page}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
         )
         .then((response) => {
-          // console.log(response.data);
           this.movies = response.data.results;
         })
-        .catch(
-          (error) => console.log(error)
-          // this.$bzToast(
-          //   this.$t("error"),
-          //   this.$t("msg_error_list_registers"),
-          //   "danger"
-          // )
-        );
+        .catch(() =>
+          this.$bzToast(
+            this.$t("error"),
+            this.$t("msg_error_listing_movies"),
+            "danger"
+          )
+        )
+        .finally(() => this.$loading(false));
     },
-    listMore() {
-      this.page += 1;
-
+    search() {
+      //  '/search/movie
       this.$http
         .get(
-          `https://api.themoviedb.org/3/movie/popular?page=${this.page}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
+          `https://api.themoviedb.org/3/search/movie?query=${this.searchTerm}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
         )
         .then((response) => {
-          this.movies = this.movies.concat(response.data.results);
+          this.movies = response.data.results;
         })
-        .catch(
-          (error) => console.log(error)
-          // this.$bzToast(
-          //   this.$t("error"),
-          //   this.$t("msg_error_list_registers"),
-          //   "danger"
-          // )
+        .catch(() =>
+          this.$bzToast(
+            this.$t("error"),
+            this.$t("msg_error_searching_movies"),
+            "danger"
+          )
         );
     },
   },
+  created() {
+    this.debounceSearch = debounce(this.search, 1000);
+  },
   mounted() {
-    this.currentUser = this.$firebase.auth().currentUser;
-    this.listGenres();
     this.listMovies();
   },
 };

@@ -81,8 +81,9 @@ export default {
   },
   methods: {
     selectProfile(profile) {
-      localStorage.setItem("profile", JSON.stringify(profile));
       this.$router.push({ name: "movies-catalog" });
+      localStorage.setItem("profile", JSON.stringify(profile));
+      this.$store.state.profile = profile; //TODO DEPOIS COLOCAR ISSO NO ESTADO CENTRAL DO VUEX
     },
     resetFormModal() {
       this.form.name = "";
@@ -113,6 +114,7 @@ export default {
         this.$bvModal.hide("modal-prevent-closing");
       });
 
+      this.$loading(true);
       this.$firebase
         .firestore()
         .collection("users")
@@ -127,7 +129,8 @@ export default {
             this.$t("msg_error_adding_profiles"),
             "danger"
           )
-        );
+        )
+        .finally(() => this.$loading(false));
     },
     getByValue(key, value) {
       return this.$firebase
@@ -138,6 +141,7 @@ export default {
     },
 
     removeProfile(profile) {
+      this.$loading(true);
       this.$firebase
         .firestore()
         .collection("users")
@@ -159,11 +163,13 @@ export default {
             this.$t("msg_error_adding_profiles"),
             "danger"
           )
-        );
+        )
+        .finally(() => this.$loading(false));
     },
   },
   mounted() {
     const currentUser = this.$firebase.auth().currentUser;
+    this.$loading(true);
     this.getByValue("uid", currentUser.uid)
       .then((response) => {
         const user = response.docs[0];
@@ -176,7 +182,8 @@ export default {
           this.$t("msg_error_listing_profiles"),
           "danger"
         )
-      );
+      )
+      .finally(() => this.$loading(false));
   },
 };
 </script>

@@ -1,9 +1,6 @@
 <template>
   <div id="sigin" class="form-account">
-    <h1 class="h3 mb-4">
-      <font-awesome-icon icon="lock" />
-      {{ $t("login") }}
-    </h1>
+    <h1 class="h3 mb-4">{{ $t("login") }}</h1>
 
     <b-form @submit="signIn">
       <b-form-group
@@ -56,15 +53,20 @@ export default {
   methods: {
     signIn(event) {
       event.preventDefault();
+      this.$loading(true);
       this.$firebase
         .auth()
         .signInWithEmailAndPassword(this.form.email, this.form.password)
-        .then(() => this.$router.push({ name: "movies-catalog" }))
-        .catch((error) => this.showErrorMessage(error.code));
+        .then(() => {
+          const currentUser = this.$firebase.auth().currentUser
+          this.$store.commit('setUser',currentUser)
+          this.$router.push({ name: "user-profile" });
+        })
+        .catch((error) => this.showErrorMessage(error.code))
+        .finally(() => this.$loading(false));
     },
     showErrorMessage(codeError) {
       let message = "";
-
       switch (codeError) {
         case "auth/user-not-found":
           message = this.$t("msg_user_wrong_email");

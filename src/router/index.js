@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import firebase from './../plugins/firebase'
+import Home from '@/views/Home'
 
-
-const Catalog = () => import(/* webpackChunkName: "users" */'@/views/movies/Catalog')
+const Catalog = () => import(/* webpackChunkName: "movies" */'@/views/movies/Catalog')
 const SignUp = () => import(/* webpackChunkName: "users" */'@/views/users/SignUp')
 const SignIn = () => import(/* webpackChunkName: "users" */'@/views/users/SignIn')
 const Profile = () => import(/* webpackChunkName: "users" */'@/views/users/Profile')
@@ -11,8 +11,8 @@ const Profile = () => import(/* webpackChunkName: "users" */'@/views/users/Profi
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', name: 'home', component: Catalog },
-  { path: '/movies/catalog', name: 'movies-catalog', component: Catalog },
+  { path: '/', name: 'home', component: Home },
+  { path: '/movies/catalog', name: 'movies-catalog', component: Catalog, meta: { requiresAuth: true } },
   { path: '/user/signup', name: 'signup', component: SignUp },
   { path: '/user/signin', name: 'signin', component: SignIn },
   { path: '/user/profile', name: 'user-profile', component: Profile, meta: { requiresAuth: true } },
@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
   const currentUser = await firebase.getCurrentUser()
 
   if (requiresAuth && !currentUser) {
-    next({ name: 'signin' })
+    next({ name: 'home' })
   } else {
     next()
   }

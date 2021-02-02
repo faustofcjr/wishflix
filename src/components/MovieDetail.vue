@@ -2,31 +2,38 @@
   <b-card-group>
     <b-card
       :img-src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`"
-      style="max-width: 40rem"
       :title="movie.title"
+      class="movie-poster"
     >
-      <b-card-text>
+      <!-- <b-card-text>
         {{ movie.overview }}
-      </b-card-text>
+      </b-card-text> -->
 
-      <b-button
-        variant="outline-success"
-        v-b-tooltip.hover
-        :title="$t('add_to_my_list')"
-        @click="addWatchlist()"
-        v-if="watchlistId == null"
-      >
-        <font-awesome-icon icon="plus-circle" size="lg" />
-      </b-button>
+      <template #footer>
+        <b-button
+          variant="outline-success"
+          @click="addWatchlist()"
+          v-if="watchlistId == null"
+        >
+          {{ $t("will_watch") }}
+        </b-button>
 
-      <b-button
-        variant="outline-success"
-        @click="markAsWatch()"
-        v-if="watchlistId != null && !watched"
-      >
-        <font-awesome-icon icon="child" />
-        {{ $t("already_watched") }}
-      </b-button>
+        <b-button
+          variant="outline-success"
+          @click="markAsWatch()"
+          v-if="watchlistId != null && !watched"
+        >
+          {{ $t("already_watched") }}
+        </b-button>
+
+        <b-button
+          variant="outline-success"
+          @click="watchAgain()"
+          v-if="watchlistId != null && watched"
+        >
+          {{ $t("watch_again") }}
+        </b-button>
+      </template>
     </b-card>
   </b-card-group>
 </template>
@@ -56,17 +63,21 @@ export default {
         .firestore()
         .collection("watchlist")
         .add(watchlist)
-        .then(() => console.log("sucesso"))
         .catch((error) => console.log(error));
     },
+    watchAgain() {
+      this.UpdateWatched(false);
+    },
     markAsWatch() {
+      this.UpdateWatched(true);
+    },
+    UpdateWatched(watched) {
       this.$firebase
         .firestore()
         .collection("watchlist")
         .doc(this.watchlistId)
-        .update({
-          watched: true,
-        });
+        .update({ watched })
+        .catch((error) => console.log(error));
     },
     // getImage(filePath) {
     //   this.$http
