@@ -1,107 +1,54 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <b-col cols="12">
-        <div id="search">
-          <b-form-input
-            v-model="searchTerm"
-            :placeholder="$t('find_movie')"
-          ></b-form-input>
-        </div>
-
-        <b-tabs content-class="mt-1">
-          <b-tab id="most_watched" :title="$t('most_watched')" active>
-            <b-row>
-              <b-col
-                v-for="movie of movies"
-                :key="movie.id"
-                cols="3"
-                class="mb-5 d-flex align-items-stretch"
-              >
-                <MovieDetail :movie="movie" />
-              </b-col>
-            </b-row>
-          </b-tab>
-
-          <b-tab :title="$t('watchlist')">
-            <Watchlist />
-          </b-tab>
-
-          <b-tab :title="$t('watched')">
-            <Watchlist :watched="true" />
-          </b-tab>
-        </b-tabs>
+  <main v-infinite-scroll="loadMovies" :infinite-scroll-distance="scrollDistance" >
+    <h4 v-show="emptyMovies">{{ $t("any_movies_selected") }}</h4>
+    <b-row >
+      <b-col
+        v-for="movie of movies"
+        :key="movie.id"
+        cols="3"
+        class="mb-5 d-flex align-items-stretch"
+      >
+        <MovieDetail :movie="movie" />
       </b-col>
-
-      <!-- <b-col>
-            <b-form-select v-model="selectedGenre">
-              <b-form-select-option :value="null">
-                {{ $t("select_genre") }}
-              </b-form-select-option>
-
-              <b-form-select-option
-                v-for="genre of genres"
-                :key="genre.id"
-                :value="genre.id"
-              >
-                {{ genre.name }}
-              </b-form-select-option>
-            </b-form-select>
-          </b-col> -->
-      <!--<b-nav-form>
-             <b-form-input
-              size="sm"
-              class="mr-sm-2"
-              :placeholder="$t('find_movie')"
-            >
-            </b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">
-              {{ $t("search") }}
-            </b-button>
-          </b-nav-form> -->
     </b-row>
-  </b-container>
+  </main>
 </template>
 
 <script>
-import { debounce } from "lodash";
 import MovieDetail from "@/components/MovieDetail";
-import Watchlist from "./Watchlist";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Catalog",
   components: {
     MovieDetail,
-    Watchlist,
   },
   computed: {
     ...mapGetters(["profile"]),
-  },
-  watch: {
-    searchTerm(term) {
-      if (term.trim().length > 0) {
-        this.debounceSearch();
-      }
+    emptyMovies() {
+      return this.movies.length == 0;
     },
+    scrollDistance() {
+      return this.page * 10
+    }
   },
   data() {
     return {
-      page: 1,
+      page: 0,
       movies: [],
-      searchTerm: "",
     };
   },
   methods: {
-    listMovies() {
+    loadMovies() {
       this.$loading(true);
+      this.page += 1
       //  '/movie/popular')
       this.$http
         .get(
           `https://api.themoviedb.org/3/movie/popular?page=${this.page}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
         )
         .then((response) => {
-          this.movies = response.data.results;
+          this.movies = this.movies.concat(response.data.results);
         })
         .catch(() =>
           this.$bzToast(
@@ -112,32 +59,9 @@ export default {
         )
         .finally(() => this.$loading(false));
     },
-    search() {
-      //  '/search/movie
-      this.$http
-        .get(
-          `https://api.themoviedb.org/3/search/movie?query=${this.searchTerm}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
-        )
-        .then((response) => {
-          this.movies = response.data.results;
-        })
-        .catch(() =>
-          this.$bzToast(
-            this.$t("error"),
-            this.$t("msg_error_searching_movies"),
-            "danger"
-          )
-        );
-    },
-  },
-  created() {
-    this.debounceSearch = debounce(this.search, 1000);
-  },
-  mounted() {
-    this.listMovies();
   },
 };
 </script>
 
-<style>
+<style  lang="scss">
 </style>

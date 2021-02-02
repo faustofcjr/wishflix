@@ -1,5 +1,8 @@
 <template>
-  <main>
+  <main
+    v-infinite-scroll="loadMovies"
+    :infinite-scroll-distance="scrollDistance"
+  >
     <h4 v-show="emptyMovies">{{ $t("any_movies_selected") }}</h4>
     <b-row>
       <b-col v-for="wl of watchlist" :key="wl.movie.id" cols="3" class="mb-3">
@@ -30,6 +33,9 @@ export default {
     emptyMovies() {
       return this.watchlist.length == 0;
     },
+    scrollDistance() {
+      return this.page * 10;
+    },
   },
   data() {
     return {
@@ -37,8 +43,8 @@ export default {
     };
   },
   methods: {
-    list() {
-      return this.$firebase
+    loadMovies() {
+      this.$firebase
         .firestore()
         .collection("watchlist")
         .where("profile", "==", this.profile)
@@ -48,21 +54,11 @@ export default {
           snapshot.docs.forEach((doc) => {
             this.watchlist.push({ id: doc.id, ...doc.data() });
           });
-        })
-        .catch(() => {
-          this.$bzToast(
-            this.$t("error"),
-            this.$t("msg_error_listing_watchlist"),
-            "danger"
-          );
         });
     },
-  },
-  mounted() {
-    this.list();
   },
 };
 </script>
 
-<style>
+<style  lang="scss">
 </style>

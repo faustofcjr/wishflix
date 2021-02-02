@@ -13,6 +13,7 @@ import './plugins/loading-vue'
 import './plugins/lodash-vue'
 import './plugins/storage-vue'
 import './plugins/uuid-vue'
+import './plugins/infinite-scroll-vue'
 
 import router from './router'
 import store from './store'

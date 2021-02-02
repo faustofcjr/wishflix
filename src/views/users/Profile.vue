@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     selectProfile(profile) {
-      this.$router.push({ name: "movies-catalog" });
+      this.$router.push({ name: "movies" });
       localStorage.setItem("profile", JSON.stringify(profile));
       this.$store.state.profile = profile; //TODO DEPOIS COLOCAR ISSO NO ESTADO CENTRAL DO VUEX
     },
