@@ -1,19 +1,16 @@
 <template>
   <b-card-group>
-    <b-card
-      :img-src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`"
-      :title="movie.title"
-      class="movie-poster"
-    >
-      <!-- <b-card-text>
-        {{ movie.overview }}
-      </b-card-text> -->
+    <b-card :img-src="`https://image.tmdb.org/t/p/w400/${movie.poster_path}`">
+      <b-card-text>
+        <h5>{{ movie.title }}</h5>
+      </b-card-text>
 
       <template #footer>
         <b-button
           variant="outline-success"
           @click="addWatchlist()"
           v-if="watchlistId == null"
+          :disabled="forbidWatch"
         >
           {{ $t("will_watch") }}
         </b-button>
@@ -39,12 +36,21 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "MovieDetail",
   props: {
     movie: Object,
     watchlistId: { Type: String, default: null },
     watched: { Type: Boolean, default: false },
+  },
+  computed: {
+    ...mapGetters(["watchlist"]),
+    forbidWatch() {
+      const moviesIds = this.watchlist.map((watch) => watch.id);
+      const forbid = !this.watchlistId && moviesIds.includes(this.movie.id);
+      return forbid;
+    },
   },
   methods: {
     addWatchlist() {
@@ -98,5 +104,5 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 </style>

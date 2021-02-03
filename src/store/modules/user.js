@@ -28,6 +28,10 @@ export default {
             commit('setUser', currentUser)
             commit('setProfile', currentProfile ? JSON.parse(currentProfile) : null)
         },
+        addProfile({ commit }, payload) {
+            localStorage.setItem("profile", JSON.stringify(payload));
+            commit('setProfile', payload)
+        },
         cleanProfile({ commit }) {
             localStorage.removeItem("profile");
             commit('setProfile', null)

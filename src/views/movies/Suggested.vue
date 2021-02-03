@@ -24,13 +24,15 @@
 
 <script>
 import MovieDetail from "@/components/MovieDetail";
+import { mapGetters } from "vuex";
 
 export default {
-  name: "Catalog",
+  name: "Suggested",
   components: {
     MovieDetail,
   },
   computed: {
+    ...mapGetters(["rankGenres", "watchlist"]),
     emptyMovies() {
       return this.movies.length == 0;
     },
@@ -44,17 +46,26 @@ export default {
   data() {
     return {
       currentPage: 1,
-      rows: 500,
+      rows: 2,
       movies: [],
     };
   },
   methods: {
     loadMovies() {
       this.$loading(true);
-      //  '/movie/popular')
+      
+      const rdGenre = this.rankGenres[Math.floor(Math.random() * 3)][0];
+      let movies = this.watchlist.filter((watch) =>{
+        const genre_ids = watch.genre_ids
+        return genre_ids.includes(parseInt(rdGenre))
+      });
+
+      const rdMovie = movies[Math.floor(Math.random(),  movies.length - 1)];
+      const movieId = rdMovie.id;
+
       this.$http
         .get(
-          `https://api.themoviedb.org/3/movie/popular?page=${this.currentPage}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
+          `https://api.themoviedb.org/3/movie/${movieId}/recommendations?page=${this.currentPage}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
         )
         .then((response) => (this.movies = response.data.results))
         .catch(() =>

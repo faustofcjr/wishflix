@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "Profile",
   computed: {
@@ -80,10 +82,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addProfile"]),
     selectProfile(profile) {
+      this.$store.dispatch("addProfile", profile);
       this.$router.push({ name: "movies" });
-      localStorage.setItem("profile", JSON.stringify(profile));
-      this.$store.state.profile = profile; //TODO DEPOIS COLOCAR ISSO NO ESTADO CENTRAL DO VUEX
     },
     resetFormModal() {
       this.form.name = "";

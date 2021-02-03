@@ -16,10 +16,7 @@
               :key="lang.key"
               @click="setLanguage(lang.key)"
             >
-              <font-awesome-icon
-                icon="check"
-                v-show="lang.key === language"
-              />
+              <font-awesome-icon icon="check" v-show="lang.key === language" />
               {{ lang.value }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -30,7 +27,7 @@
               <em v-else>{{ profile.name }}</em>
             </template>
 
-            <b-dropdown-item @click="changeProfile()" v-show="profile">
+            <b-dropdown-item @click="changeProfile()" v-if="profile" >
               <font-awesome-icon icon="user-friends" class="mr-1" />
               {{ $t("change_profile") }}
             </b-dropdown-item>
@@ -76,7 +73,7 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.push("/");
+          this.$router.push({ name: "signin" });
           this.$store.dispatch("logout");
         });
     },

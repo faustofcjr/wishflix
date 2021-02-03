@@ -1,11 +1,13 @@
 <template>
-  <main
-    v-infinite-scroll="loadMovies"
-    :infinite-scroll-distance="scrollDistance"
-  >
+  <main>
     <h4 v-show="emptyMovies">{{ $t("any_movies_selected") }}</h4>
     <b-row>
-      <b-col v-for="wl of watchlist" :key="wl.movie.id" cols="3" class="mb-3">
+      <b-col
+        v-for="wl of watchlist"
+        :key="wl.movie.id"
+        cols="3"
+        class="mb-5 align-items-stretch"
+      >
         <MovieDetail
           :movie="wl.movie"
           :watched="wl.watched"
@@ -18,7 +20,7 @@
 
 <script>
 import MovieDetail from "@/components/MovieDetail";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Watchlist",
@@ -33,9 +35,6 @@ export default {
     emptyMovies() {
       return this.watchlist.length == 0;
     },
-    scrollDistance() {
-      return this.page * 10;
-    },
   },
   data() {
     return {
@@ -43,6 +42,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["concatWatchlist"]),
     loadMovies() {
       this.$firebase
         .firestore()
@@ -54,8 +54,13 @@ export default {
           snapshot.docs.forEach((doc) => {
             this.watchlist.push({ id: doc.id, ...doc.data() });
           });
+
+          this.$store.dispatch("concatWatchlist", this.watchlist);
         });
     },
+  },
+  mounted() {
+    this.loadMovies();
   },
 };
 </script>
