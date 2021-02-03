@@ -19,6 +19,24 @@ export default {
     return this.collection.where(name, "==", value).get();
   },
   /**
+  * Find a user by a value in a given users document field.
+  * 
+  * @param {string} name - document attribute name.
+  * @param {Object} value - the value itself that will be searched.
+  * @return { Promise } - promise that response  will be answered.
+  */
+  find(name, value) {
+    return new Promise((resolve, reject) => {
+      this.get(name, value).then((response) => {
+        const documents = response.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() }
+        });
+        const user = (documents.length == 0) ? null : documents[0]
+        resolve({ user })
+      }).catch((error) => reject(error))
+    })
+  },
+  /**
    * Create a new user with email and password credentials.
    * 
    * @param {string} email
@@ -34,9 +52,9 @@ export default {
 
         this.collection.add(user)
           .then((response) => resolve(response))
-          .catch(error => reject(error))
+          .catch((error) => reject(error))
 
-      }).catch(error => reject(error))
+      }).catch((error) => reject(error))
     })
   },
   /**
@@ -69,34 +87,69 @@ export default {
             .then(() => resolve({ user: fbUser }))
             .catch(error => reject(error))
         })
-        .catch(error => reject(error))
+        .catch((error) => reject(error))
     });
   },
   /**
    * create if user doesn't exist, otherwise it returns user found.
    * 
-   * @param {object} user 
+   * @param {object} user
+   * @return { Promise } - promise that response  will be answered.
    */
   createIfNotExists(user) {
     return new Promise((resolve, reject) => {
-      this.collection.where("uid", "==", user.uid).get().then(response => {
-        const documents = response.docs.map((doc) => doc.data());
+      this.find("uid", user.uid).then(response => {
+        if (!response.user) {
 
-        if (documents.length == 0) {
           this.collection.add(user)
             .then((response) => resolve(response))
             .catch(error => reject(error))
+
         } else {
-          const user = documents[0]
-          resolve({ user })
+          resolve({ user: response.user })
         }
-      }).catch(error => reject(error))
+      }).catch((error) => reject(error))
     })
   },
   /**
-   * Get the authenticated and previously authorized user at sign in.
+   * Get the authenticated and authorized user at sign in.
    */
   getCurrentUser() {
+    const auth = this.auth.currentUser;
+    return this.find("uid", auth.uid)
+  },
+  /**
+   * Get the credentials of user authenticated and authorized at sign in.
+   */
+  getUserCredentials() {
     return this.auth.currentUser;
+  },
+  /**
+   * Adds a new profile for the user.
+   * 
+   * @param {string} id - User id
+   * @param {strin} name - profile name
+   * @param {main} main - define if profile is principal. Default is false.
+   * @return { Promise } - promise that response  will be answered.
+   */
+  addProfile(id, name, main = false) {
+    let profile = { uuid: uuid.v4(), name, main };
+    return new Promise((resolve, reject) => {
+      this.collection.doc(id)
+        .update({ profiles: firebase.firestore.FieldValue.arrayUnion(profile) })
+        .then(() => resolve({ profile }))
+        .catch((error) => reject(error))
+    })
+  },
+  /**
+   *  Removes profile for the user.
+   * 
+   * @param {string} id - User id
+   * @param {Object} profile 
+   * @return { Promise } - promise that response  will be answered.
+   */
+  removeProfile(id, profile) {
+    return this.collection.doc(id)
+      .update({ profiles: firebase.firestore.FieldValue.arrayRemove(profile) })
   }
 }

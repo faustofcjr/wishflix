@@ -10,7 +10,7 @@
           <b-tab id="most-watched" :title="$t('most_watched')" active>
             <Catalog />
           </b-tab>
-          <b-tab id="suggested-movies" :title="$t('suggested_movies')" active>
+          <b-tab id="suggested-movies" :title="$t('suggested_movies')">
             <Suggested />
           </b-tab>
 

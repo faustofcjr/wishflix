@@ -39,6 +39,7 @@ header {
     content:" *";
 }
 
+
 /** Form **/
 .form-account {
     margin: 0 auto;
@@ -69,16 +70,6 @@ header {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         margin-bottom: 10px;
-    }
-}
-
-/** Profile **/
-.profile {
-    img {
-        border-radius: 20%;
-        background-color: $primary-color;
-        width:120px;
-        height:120px;
     }
 }
 
