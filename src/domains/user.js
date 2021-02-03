@@ -91,6 +91,14 @@ export default {
     });
   },
   /**
+   * User logged out
+   * 
+   * @return { Promise } - promise that response  will be answered.
+   */
+  signOut() {
+    return this.auth.signOut()
+  },
+  /**
    * create if user doesn't exist, otherwise it returns user found.
    * 
    * @param {object} user

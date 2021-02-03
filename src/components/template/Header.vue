@@ -1,6 +1,6 @@
 <template>
   <header>
-    <b-navbar toggleable="lg" type="dark">
+    <b-navbar toggleable="lg" type="dark" variant="success">
       <router-link to="/" class="navbar-brand d-flex align-items-center">
         <font-awesome-icon icon="film" class="mr-2" />
         <strong>{{ $t("app_name") }} </strong>
@@ -14,10 +14,10 @@
             <b-dropdown-item
               v-for="lang of languages"
               :key="lang.key"
-              @click="setLanguage(lang.key)"
+              @click="changeLanguage(lang.key)"
             >
               <font-awesome-icon icon="check" v-show="lang.key === language" />
-              {{ lang.value }}
+              {{ $t(lang.value) }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
 
@@ -27,7 +27,7 @@
               <em v-else>{{ profile.name }}</em>
             </template>
 
-            <b-dropdown-item @click="changeProfile()" v-if="profile" >
+            <b-dropdown-item @click="changeProfile()" v-if="profile">
               <font-awesome-icon icon="user-friends" class="mr-1" />
               {{ $t("change_profile") }}
             </b-dropdown-item>
@@ -44,38 +44,28 @@
 </template>
 
 <script>
+import user from "@/domains/user";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Header",
   computed: {
-    ...mapGetters(["user", "profile", "language"]),
-  },
-  data() {
-    return {
-      languages: [
-        { key: "pt_br", value: this.$t("portuguese") },
-        { key: "en", value: this.$t("english") },
-      ],
-    };
+    ...mapGetters(["user", "profile", "languages", "language"]),
   },
   methods: {
     ...mapActions(["logout", "cleanProfile", "changeLanguage"]),
-    setLanguage(key) {
-      this.$store.dispatch("changeLanguage", key);
-    },
     changeProfile() {
-      this.cleanProfile("cleanProfile");
+      this.cleanProfile();
       this.$router.push({ name: "user-profile" });
     },
     signOut() {
-      this.$firebase
-        .auth()
+      user
         .signOut()
         .then(() => {
           this.$router.push({ name: "signin" });
-          this.$store.dispatch("logout");
-        });
+          this.logout();
+        })
+        .catch(() => this.$toast(this.$t("msg_error_user_signout"), "warning"));
     },
   },
 };

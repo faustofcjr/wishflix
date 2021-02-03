@@ -8,7 +8,7 @@
     <b-row class="justify-content-md-center pt-md-5">
       <b-col cols="3" v-for="profile of profiles" :key="profile.key">
         <b-button
-          :variant="profile.main ? 'outline-primary' : 'outline-success'"
+          :variant="profile.main ? 'outline-success': 'outline-primary'"
           @click="selectProfile(profile)"
         >
           <font-awesome-icon icon="user" size="7x" />

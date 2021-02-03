@@ -1,4 +1,5 @@
 {
+  "msg_error_user_signout": "An error occurred while exiting the system.",
   "add_to_my_list": "Add to my list",
   "already_watched":"Already watched",
   "alternative_login": "or login with",

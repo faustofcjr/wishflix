@@ -4,41 +4,20 @@ html, body {
     height: 100%;
 }
 
-content {
-    background-color: $primary-color;
-}
-
-header {
-    .navbar {
-        background-color: $primary-color;
-        
-    }
-}
-
 .footer {
-    background-color: $tertiary-color;
+    background-color: $primary-color;
     bottom:0;
     height: 35px;
     padding: 5px 15px;
     position:fixed;
     text-align: right;
     width:100%;
-    img {
-        width: 50px;
-        height: 50px;
-    }
     a, p {
-        color: $secondary-color;
-        font-size: 13px;
+        color: $tertiary-color;
+        font-size: 15px;
         text-align: right;
     }
-
 }
-
-.required:after {
-    content:" *";
-}
-
 
 /** Form **/
 .form-account {
@@ -49,6 +28,10 @@ header {
 
     h2 {
         text-align: center; 
+    }
+
+    .required:after {
+        content:" *";
     }
 
     .form-control {
@@ -76,7 +59,6 @@ header {
 /** Movie **/
 #search {
     margin: 50px 15px;
-
     input[type="text"] {
         height: 60px;
     }

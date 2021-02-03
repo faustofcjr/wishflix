@@ -23,8 +23,8 @@ export default {
     ...mapActions(["getCurrentUser", "getCurrentLanguage"]),
   },
   mounted() {
-    this.$store.dispatch("getCurrentUser");
-    this.$store.dispatch("changeLanguage");
+    this.getCurrentUser();
+    this.getCurrentLanguage();
   },
 };
 </script>

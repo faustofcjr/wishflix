@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import MovieDetail from "@/components/MovieDetail";
+import MovieDetail from "./MovieDetail";
 import { mapGetters } from "vuex";
 
 export default {
