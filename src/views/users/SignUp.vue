@@ -4,7 +4,7 @@
       {{ $t("sign_up") }}
     </h1>
 
-    <b-form @submit="onSubmit" @reset="onReset">
+    <b-form @submit="create" @reset="onCancel">
       <b-form-group
         id="input-name"
         :label="$t('name')"
@@ -59,11 +59,12 @@
           id="password"
           v-model="form.password"
           required
+          minlength="6"
           autocomplete="password"
         ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">
+      <b-button type="submit" variant="success">
         {{ $t("register") }}
       </b-button>
       <b-button type="reset" variant="danger" class="ml-2">
@@ -73,9 +74,10 @@
 
     <b-modal
       id="modal-cancel"
-      header-bg-variant="secondary"
+      header-bg-variant="success"
       header-text-variant="light"
       footer-bg-variant="light"
+      okVariant="success"
       :okTitle="$t('yes')"
       :cancelTitle="$t('no')"
       @ok="cancel"
@@ -86,12 +88,13 @@
 </template>
 
 <script>
+import user from "@/domains/user";
+
 export default {
   name: "SignUp",
   data() {
     return {
       form: {
-        profiles: [],
         email: "",
         password: "",
         name: "",
@@ -100,74 +103,41 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {
+    create(event) {
       event.preventDefault();
-
-      if (this.form.password.length < 6) {
-        this.$toast(
-          this.$t("error"),
-          this.$t("msg_error_signup_password_length"),
-          "danger"
-        );
-        return;
-      }
-
       this.$loading(true);
-      this.getByValue("email", this.form.email)
+
+      user
+        .get("email", this.form.email)
         .then((response) => {
           const documents = response.docs.map((doc) => doc.data());
           if (documents.length == 0) {
-            this.create();
+            const payload = {
+              name: this.form.name,
+              birthday: this.form.birthday,
+            };
+
+            user
+              .create(this.form.email, this.form.password, payload)
+              .then(() => {
+                let msgSuccess = this.$t("msg_account_successfully_create");
+                this.$toast(msgSuccess, "success");
+                this.$router.push({ name: "signin" });
+              })
+              .catch(() => this.showUnexpectedMessage());
           } else {
             let message = this.$t("msg_signup_email_registered");
-            this.$toast(this.$t("error"), message, "danger");
+            this.$toast(message, "warning");
           }
         })
+        .catch(() => this.showUnexpectedMessage())
         .finally(() => this.$loading(false));
-    },
-    create() {
-      this.$firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.form.email, this.form.password)
-        .then((response) => {
-          const user = {
-            uid: response.user.uid,
-            email: this.form.email,
-            name: this.form.name,
-            birthday: this.form.birthday,
-            profiles: [
-              { uid: this.$uuid.v4(), name: this.form.name, main: true },
-            ],
-          };
-
-          this.$firebase
-            .firestore()
-            .collection("users")
-            .add(user)
-            .then(() => {
-              this.$toast(
-                this.$t("success"),
-                this.$t("msg_account_successfully_create"),
-                "success"
-              );
-              this.$router.push({ name: "user-profile" });
-            })
-            .catch(() => this.showUnexpectedMessage());
-        })
-        .catch(() => this.showUnexpectedMessage());
     },
     showUnexpectedMessage() {
       let message = this.$t("msg_error_signin");
-      this.$toast(this.$t("error"), message, "danger");
+      this.$toast(message, "warning");
     },
-    getByValue(key, value) {
-      return this.$firebase
-        .firestore()
-        .collection("users")
-        .where(key, "==", value)
-        .get();
-    },
-    onReset(event) {
+    onCancel(event) {
       event.preventDefault();
       this.$bvModal.show("modal-cancel");
     },
@@ -178,5 +148,5 @@ export default {
 };
 </script>
 
-<style>
+<style  lang="scss">
 </style>

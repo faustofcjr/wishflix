@@ -126,11 +126,7 @@ export default {
         })
         .then(() => this.profiles.push(newOne))
         .catch(() =>
-          this.$toast(
-            this.$t("error"),
-            this.$t("msg_error_adding_profiles"),
-            "danger"
-          )
+          this.$toast(this.$t("msg_error_adding_profiles"), "warning")
         )
         .finally(() => this.$loading(false));
     },
@@ -160,11 +156,7 @@ export default {
           this.profiles.splice(index, 1);
         })
         .catch(() =>
-          this.$toast(
-            this.$t("error"),
-            this.$t("msg_error_adding_profiles"),
-            "danger"
-          )
+          this.$toast(this.$t("msg_error_adding_profiles"), "warning")
         )
         .finally(() => this.$loading(false));
     },
@@ -179,16 +171,12 @@ export default {
         this.profiles = user.data().profiles;
       })
       .catch(() =>
-        this.$toast(
-          this.$t("error"),
-          this.$t("msg_error_listing_profiles"),
-          "danger"
-        )
+        this.$toast(this.$t("msg_error_listing_profiles"), "warning")
       )
       .finally(() => this.$loading(false));
   },
 };
 </script>
 
-<style>
+<style  lang="scss">
 </style>

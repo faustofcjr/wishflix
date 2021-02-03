@@ -42,6 +42,7 @@
     </b-form>
 
     <hr />
+
     <p>{{ $t("alternative_login") }}</p>
     <b-button variant="primary" size="sm" @click="signInWithFacebook">
       {{ $t("facebook") }}
@@ -50,7 +51,7 @@
 </template>
 
 <script>
-import firebase from "@/plugins/firebase";
+import user from "@/domains/user";
 
 export default {
   name: "SignIn",
@@ -64,21 +65,13 @@ export default {
   },
   methods: {
     signInWithFacebook() {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      this.$firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          var credential = result.credential;
-          var user = result.user.displayName;
-          var accessToken = credential.accessToken;
-
-
-// displayName: "Fausto Carvalho"
-// email: "fausto_fcjr@yahoo.com.br"
-// uid
-          console.log(user)
-          console.log(accessToken)
+      this.$loading(true);
+      user
+        .signInWithFacebook()
+        .then((response) => {
+          const user = response.user;
+          this.$store.commit("setUser", user);
+          this.$router.push({ name: "user-profile" });
         })
         .catch((error) => this.showErrorMessage(error.code))
         .finally(() => this.$loading(false));
@@ -86,12 +79,11 @@ export default {
     signIn(event) {
       event.preventDefault();
       this.$loading(true);
-      this.$firebase
-        .auth()
-        .signInWithEmailAndPassword(this.form.email, this.form.password)
-        .then(() => {
-          const currentUser = this.$firebase.auth().currentUser;
-          this.$store.commit("setUser", currentUser);
+      user
+        .signIn(this.form.email, this.form.password)
+        .then((response) => {
+          const user = response.user;
+          this.$store.commit("setUser", user);
           this.$router.push({ name: "user-profile" });
         })
         .catch((error) => this.showErrorMessage(error.code))
@@ -109,11 +101,11 @@ export default {
         default:
           message = this.$t("msg_error_user_signin");
       }
-      this.$toast(this.$t("error"), message, "danger");
+      this.$toast(message, "warning");
     },
   },
 };
 </script>
 
-<style>
+<style  lang="scss">
 </style>

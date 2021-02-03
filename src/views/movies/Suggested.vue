@@ -70,9 +70,8 @@ export default {
         .then((response) => (this.movies = response.data.results))
         .catch(() =>
           this.$toast(
-            this.$t("error"),
             this.$t("msg_error_listing_movies"),
-            "danger"
+            "warning"
           )
         )
         .finally(() => this.$loading(false));

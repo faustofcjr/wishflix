@@ -58,11 +58,7 @@ export default {
         )
         .then((response) => (this.movies = response.data.results))
         .catch(() =>
-          this.$toast(
-            this.$t("error"),
-            this.$t("msg_error_listing_movies"),
-            "danger"
-          )
+          this.$toast(this.$t("msg_error_listing_movies"), "warning")
         )
         .finally(() => this.$loading(false));
     },
@@ -81,5 +77,5 @@ export default {
 };
 </script>
 
-<style  lang="scss">
+<style lang="scss">
 </style>
