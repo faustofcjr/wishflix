@@ -1,5 +1,6 @@
 {
-  "msg_error_user_signout": "Ocorreu um erro ao sair do sistema.",
+  "msg_error_add_movie_watchlist": "Ocorreu um erro inesperado ao adicionar o filme à sua lista.",
+  "msg_error_update_movie_watchlist": "Ocorreu um erro inesperado ao atualizar o sua lista de filmes.",
   "add_to_my_list": "Adicionar a minha lista",
   "already_watched":"Já assisti",
   "alternative_login": "ou faça o login com",
@@ -32,6 +33,7 @@
   "msg_error_signin": "Ocorreu um erro inesperado no cadastro.",
   "msg_error_signup_password_length": "A senha deve ter pelo menos 6 caracteres.",
   "msg_error_user_signin": "Ocorreu um erro inesperado durante o login.",
+  "msg_error_user_signout": "Ocorreu um erro ao sair do sistema.",
   "msg_signup_email_registered": "Já existe um usuário associada ao mesmo email.",
   "msg_user_wrong_email": "Não há registro de usuário correspondente ao email.",
   "msg_user_wrong_password": "A senha inválida.",

@@ -3,6 +3,9 @@
 import firebase from '@/plugins/firebase'
 import { uuid } from "vue-uuid";
 
+/**
+ * Module that encodes users business logic.
+ */
 export default {
   name: "user",
   collection: firebase.firestore().collection("users"),

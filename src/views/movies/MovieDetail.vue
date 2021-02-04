@@ -1,6 +1,7 @@
 <template>
   <b-card-group>
-    <b-card :img-src="`https://image.tmdb.org/t/p/w400/${movie.poster_path}`">
+    <b-card :img-src="image" img-lazy img-alt="Card image">
+      
       <b-card-text>
         <h5>{{ movie.title }}</h5>
       </b-card-text>
@@ -36,7 +37,10 @@
 </template>
 
 <script>
+import movie from "@/domains/movie";
+import watchlist from "@/domains/watchlist";
 import { mapGetters } from "vuex";
+
 export default {
   name: "MovieDetail",
   props: {
@@ -45,12 +49,17 @@ export default {
     watched: { Type: Boolean, default: false },
   },
   computed: {
-    ...mapGetters(["watchlist"]),
+    ...mapGetters(["watchlist", "profile"]),
     forbidWatch() {
       const moviesIds = this.watchlist.map((watch) => watch.id);
       const forbid = !this.watchlistId && moviesIds.includes(this.movie.id);
       return forbid;
     },
+  },
+  data() {
+    return {
+      image: ""
+    }
   },
   methods: {
     addWatchlist() {
@@ -62,14 +71,9 @@ export default {
         genre_ids: this.movie.genre_ids,
       };
 
-      const profile = JSON.parse(localStorage.getItem("profile"));
-      const watchlist = { profile: profile, movie, watched: false };
-
-      this.$firebase
-        .firestore()
-        .collection("watchlist")
-        .add(watchlist)
-        .catch((error) => console.log(error));
+      watchlist
+        .addToWatchlist(movie, this.profile)
+        .catch(() => this.$toast(this.$t("msg_error_add_movie_watchlist", "warning")));
     },
     watchAgain() {
       this.UpdateWatched(false);
@@ -78,29 +82,20 @@ export default {
       this.UpdateWatched(true);
     },
     UpdateWatched(watched) {
-      this.$firebase
-        .firestore()
-        .collection("watchlist")
-        .doc(this.watchlistId)
-        .update({ watched })
-        .catch((error) => console.log(error));
+      watchlist
+        .updateWatchlist(this.watchlistId, { watched })
+        .catch(() => this.$toast(this.$t("msg_error_update_movie_watchlist", "warning")));
     },
-    // getImage(filePath) {
-    //   this.$http
-    //     .get(`https://image.tmdb.org/t/p/w300/${filePath}`)
-    //     .then((response) => {
-    //       console.log(response.data);
-    //     })
-    //     .catch(
-    //       (error) => console.log(error)
-    //       // this.$bzToast(
-    //       //   this.$t("error"),
-    //       //   this.$t("msg_error_list_registers"),
-    //       //   "danger"
-    //       // )
-    //     );
-    // },
+    getImage() {
+      const path = this.movie.poster_path
+
+      // some poster_path come null, prevent console error
+      this.image = path ? movie.getImageURL(path) : "" 
+    },
   },
+  mounted() {
+    this.getImage()
+  }
 };
 </script>
 

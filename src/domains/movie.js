@@ -1,16 +1,12 @@
 "use strict";
 
 import axios from '@/plugins/axios'
-import firebase from '@/plugins/firebase'
 
 /**
- * Module that encodes movies business logic. Depending on the 
- * rule, queries are made on different sources like Firebase 
- * Cloud Firestore or TMDB API.
+ * Module that encodes movies business logic.
  */
 export default {
     name: "movie",
-    collection: firebase.firestore().collection("watchlist"),
     /**
      * Get a list of the current popular movies on list updates daily.
      * 
@@ -33,23 +29,13 @@ export default {
         return axios.get(resource)
     },
     /**
-     * Get watchlist movies for a user profile.
-     * 
-     * This function listen watchlist document and provide snapshot 
-     * immediately of  watchlist movies. 
-     * 
-     * @param {Object} profile - User profile
-     * @param {Boolean} watched - watched or not condition
-     * @param {Function} callback - callback function
+     * Get movie image URL.
+     *  
+     * @param {String} posterPath - poster path
+     * @param {String} size - file size. Default is 300
      */
-    getWatchlist(profile, watched, callback) {
-        this.collection
-        .where("profile", "==", profile)
-        .where("watched", "==", watched)
-        .onSnapshot((snapshot) => {
-            let watchlist = []
-            snapshot.docs.forEach((doc) => watchlist.push({ id: doc.id, ...doc.data() }));
-            callback(watchlist)
-        })
-    },
+    getImageURL(posterPath, size = 300) {
+        let imageURL =  process.env.VUE_APP_API_IMAGE_URL || ""
+        return `${imageURL}/t/p/w${size}${posterPath}`
+    }
 }

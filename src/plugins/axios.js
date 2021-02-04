@@ -4,7 +4,9 @@ import Vue from 'vue';
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.baseURL || process.env.VUE_APP_API_URL || "";
+axios.defaults.imageURL =  process.env.VUE_APP_API_IMAGE_URL || ""
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8'
+
 
 let config = {
   timeout: 15 * 1000

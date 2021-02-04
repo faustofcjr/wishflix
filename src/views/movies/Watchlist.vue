@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import movie from "@/domains/movie";
+import watchlist from "@/domains/watchlist";
 import MovieDetail from "./MovieDetail";
 import { mapGetters, mapActions } from "vuex";
 
@@ -45,7 +45,7 @@ export default {
   methods: {
     ...mapActions(["concatWatchlist"]),
     loadMovies() {
-      movie.getWatchlist(this.profile, this.watched, (snapshot) => {
+      watchlist.getWatchlist(this.profile, this.watched, (snapshot) => {
         this.watchlist = snapshot;
         this.concatWatchlist(this.watchlist);
       });
