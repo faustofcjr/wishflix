@@ -51,7 +51,7 @@ export default {
     return new Promise((resolve, reject) => {
       this.auth.createUserWithEmailAndPassword(email, password).then(response => {
         const profiles = [{ uuid: uuid.v4(), name: payload.name, main: true }]
-        let user = { uid: response.user.uid, ...payload, profiles }
+        let user = { uid: response.user.uid, email, ...payload, profiles }
 
         this.collection.add(user)
           .then((response) => resolve(response))
@@ -83,7 +83,7 @@ export default {
         .then((response) => {
           const fbUser = response.user;
           const profiles = [{ uuid: uuid.v4(), name: fbUser.displayName, main: true }]
-          let user = { uid: fbUser.uid, name: fbUser.displayName, profiles }
+          let user = { uid: fbUser.uid, email: fbUser.email, name: fbUser.displayName, profiles }
 
           // Create user on first login
           this.createIfNotExists(user)
