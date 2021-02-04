@@ -1,15 +1,32 @@
+import App from './App.vue'
+import Vue from 'vue'
+
 import '@babel/polyfill'
 import 'mutationobserver-shim'
-import Vue from 'vue'
+import './registerServiceWorker'
+
 import './plugins/axios'
 import './plugins/bootstrap-vue'
-import App from './App.vue'
-import './registerServiceWorker'
+import './plugins/firebase'
+import './plugins/fontawesome'
+import './plugins/loading-vue'
+import './plugins/lodash-vue'
+import './plugins/uuid-vue'
+
 import router from './router'
 import store from './store'
 import i18n from './i18n'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$toast = function (message, variant) {
+  this.$root.$bvToast.toast(message, {
+    title: this.$t(variant),
+    variant,
+    solid: true,
+    toaster: 'b-toaster-top-right',
+  });
+}
 
 new Vue({
   router,

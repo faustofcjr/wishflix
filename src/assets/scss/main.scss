@@ -1,0 +1,95 @@
+@import 'commons/variables.scss';
+
+html, body {
+    height: 100%;
+}
+
+.footer {
+    background-color: $primary-color;
+    bottom:0;
+    height: 35px;
+    padding: 5px 15px;
+    position:fixed;
+    text-align: right;
+    width:100%;
+    a, p {
+        color: $tertiary-color;
+        font-size: 15px;
+        text-align: right;
+    }
+}
+
+/** Form **/
+.form-account {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 15px;
+    width: 100%;
+
+    h2 {
+        text-align: center; 
+    }
+
+    .required:after {
+        content:" *";
+    }
+
+    .form-control {
+        box-sizing: border-box;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        position: relative;
+    }
+    .form-control:focus {
+        z-index: 2;
+    }
+    input[type="email"] {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-bottom: -1px;
+    }
+    input[type="password"] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/** Movie **/
+#search {
+    margin: 50px 15px;
+    input[type="text"] {
+        height: 60px;
+    }
+}
+
+.btn-scroll-top {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 99;
+    font-size: 20px;
+  }
+
+
+/** transition and animation **/
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+@media (max-width: 575px) { 
+    .footer {
+        a, p {
+            color: $secondary-color;
+            font-size: 10px;
+        }
+    
+    }  
+}
