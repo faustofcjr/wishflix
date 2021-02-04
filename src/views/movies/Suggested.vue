@@ -86,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    this.loadMovies();
+    // this.loadMovies();
   },
 };
 </script>

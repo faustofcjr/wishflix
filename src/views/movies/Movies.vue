@@ -1,14 +1,14 @@
 <template>
-  <b-container fluid>
+  <b-container>
     <b-row>
-      <b-col cols="12">
+      <b-col>
         <div id="search">
           <b-form-input v-model="searchTerm" :placeholder="$t('find_movie')" />
         </div>
 
         <b-tabs content-class="mt-1">
           <b-tab id="most-watched" :title="$t('most_watched')" active>
-            <Catalog />
+            <Catalog :searchTerm="searchTerm" />
           </b-tab>
           <b-tab id="suggested-movies" :title="$t('suggested_movies')">
             <Suggested />
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { debounce } from "lodash";
 import Catalog from "./Catalog";
 import Watchlist from "./Watchlist";
 import Suggested from "./Suggested";
@@ -40,40 +39,10 @@ export default {
     Suggested,
     Watchlist,
   },
-  computed: {},
-  watch: {
-    searchTerm(term) {
-      if (term.trim().length > 0) {
-        this.debounceSearch();
-      }
-    },
-  },
   data() {
     return {
       searchTerm: "",
     };
-  },
-  methods: {
-    search() {
-      //  '/search/movie
-      this.$http
-        .get(
-          `https://api.themoviedb.org/3/search/movie?query=${this.searchTerm}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
-        )
-        .then((response) => {
-          this.movies = response.data.results;
-        })
-        .catch(() =>
-          this.$bzToast(
-            this.$t("error"),
-            this.$t("msg_error_searching_movies"),
-            "danger"
-          )
-        );
-    },
-  },
-  created() {
-    this.debounceSearch = debounce(this.search, 1000);
   },
 };
 </script>

@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import movie from "@/domains/movie";
 import MovieDetail from "./MovieDetail";
 import { mapGetters, mapActions } from "vuex";
 
@@ -44,19 +45,10 @@ export default {
   methods: {
     ...mapActions(["concatWatchlist"]),
     loadMovies() {
-      this.$firebase
-        .firestore()
-        .collection("watchlist")
-        .where("profile", "==", this.profile)
-        .where("watched", "==", this.watched)
-        .onSnapshot((snapshot) => {
-          this.watchlist = [];
-          snapshot.docs.forEach((doc) => {
-            this.watchlist.push({ id: doc.id, ...doc.data() });
-          });
-
-          this.$store.dispatch("concatWatchlist", this.watchlist);
-        });
+      movie.getWatchlist(this.profile, this.watched, (snapshot) => {
+        this.watchlist = snapshot;
+        this.concatWatchlist(this.watchlist);
+      });
     },
   },
   mounted() {

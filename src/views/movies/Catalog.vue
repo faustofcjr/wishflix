@@ -10,7 +10,7 @@
       >
         <MovieDetail :movie="movie" />
       </b-col>
-      <b-col class="mb-5">
+      <b-col class="mb-5" v-show="displayPagination">
         <b-pagination
           v-model="currentPage"
           :total-rows="rows"
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import movie from "@/domains/movie";
+import { debounce } from "lodash";
 import MovieDetail from "./MovieDetail";
 
 export default {
@@ -30,15 +32,30 @@ export default {
   components: {
     MovieDetail,
   },
+  props: {
+    searchTerm: { type: String, default: "" },
+  },
   computed: {
     emptyMovies() {
       return this.movies.length == 0;
     },
+    displayPagination() {
+      return this.searchTerm.length == 0;
+    }
   },
   watch: {
     currentPage() {
       this.scrollToTop();
       this.loadMovies();
+    },
+    searchTerm(term) {
+      if (term.trim().length > 0) {
+        this.debounceSearch();
+      }
+
+      if (term.length == 0) {
+        this.loadMovies()
+      }
     },
   },
   data() {
@@ -51,15 +68,20 @@ export default {
   methods: {
     loadMovies() {
       this.$loading(true);
-      //  '/movie/popular')
-      this.$http
-        .get(
-          `https://api.themoviedb.org/3/movie/popular?page=${this.currentPage}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
-        )
+      movie
+        .listPopular(this.currentPage)
         .then((response) => (this.movies = response.data.results))
-        .catch(() =>
-          this.$toast(this.$t("msg_error_listing_movies"), "warning")
-        )
+        .catch(() => this.$toast(this.$t("msg_error_listing_movies"), "warning"))
+        .finally(() => this.$loading(false));
+    },
+    search() {
+      if(this.searchTerm.length == 0) {
+        return;
+      }
+      this.$loading(true);
+      movie
+        .search(this.searchTerm).then((response) => this.movies = response.data.results)
+        .catch(() => this.$toast(this.$t("msg_error_searching_movies"), "warning"))
         .finally(() => this.$loading(false));
     },
     scrollToTop() {
@@ -72,6 +94,7 @@ export default {
     },
   },
   mounted() {
+    this.debounceSearch = debounce(this.search, 1000);
     this.loadMovies();
   },
 };
