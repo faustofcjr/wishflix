@@ -19,6 +19,9 @@ export default {
         addWatchlist(state, payload) {
             state.watchlist.push(payload)
         },
+        setWatchlist(state, payload) {
+            state.watchlist = payload
+        },
         setFavoriteGenres(state, payload) {
             state.favoriteGenres = payload
         },
@@ -27,6 +30,11 @@ export default {
         }
     },
     actions: {
+        clearMovies({ commit }) {
+            commit('setWatchlist', [])
+            commit('setFavoriteGenres', [])
+            commit('setRankGenres', [])
+        },
         concatWatchlist({ commit, state }, payload) {
 
             // Group totals by movie ids. It is the base for generating an orderly rankGenres. 

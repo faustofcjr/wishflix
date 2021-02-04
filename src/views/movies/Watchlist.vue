@@ -15,6 +15,15 @@
         />
       </b-col>
     </b-row>
+    <b-button
+      @click="scrollToTop()"
+      v-if="showScrollUp"
+      pill
+      variant="success"
+      class="btn-scroll-top"
+    >
+      <font-awesome-icon icon="arrow-up" />
+    </b-button>
   </main>
 </template>
 
@@ -36,6 +45,9 @@ export default {
     emptyMovies() {
       return this.watchlist.length == 0;
     },
+    showScrollUp() {
+      return this.watchlist.length > 20;
+    },
   },
   data() {
     return {
@@ -50,6 +62,14 @@ export default {
         this.concatWatchlist(this.watchlist);
       });
     },
+  },
+  scrollToTop() {
+    this.interval = setInterval(() => {
+      if (window.pageYOffset === 0) {
+        clearInterval(this.interval);
+      }
+      window.scroll(0, window.pageYOffset - 100);
+    }, 10);
   },
   mounted() {
     this.loadMovies();

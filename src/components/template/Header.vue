@@ -53,17 +53,19 @@ export default {
     ...mapGetters(["user", "profile", "languages", "language"]),
   },
   methods: {
-    ...mapActions(["logout", "cleanProfile", "changeLanguage"]),
+    ...mapActions(["logout", "cleanProfile", "changeLanguage", "clearMovies"]),
     changeProfile() {
       this.cleanProfile();
+      this.clearMovies()
       this.$router.push({ name: "user-profile" });
     },
     signOut() {
       user
         .signOut()
         .then(() => {
-          this.$router.push({ name: "signin" });
+           this.clearMovies()
           this.logout();
+          this.$router.push({ name: "signin" });
         })
         .catch(() => this.$toast(this.$t("msg_error_user_signout"), "warning"));
     },

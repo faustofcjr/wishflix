@@ -12,6 +12,7 @@
       </b-col>
       <b-col class="mb-5" v-show="displayPagination">
         <b-pagination
+          v-if="!emptyMovies"
           v-model="currentPage"
           :total-rows="rows"
           :per-page="1"

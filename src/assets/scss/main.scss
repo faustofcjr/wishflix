@@ -64,6 +64,14 @@ html, body {
     }
 }
 
+.btn-scroll-top {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 99;
+    font-size: 20px;
+  }
+
 
 /** transition and animation **/
 .fade-enter,

@@ -10,19 +10,22 @@
       >
         <MovieDetail :movie="movie" />
       </b-col>
-      <b-col class="mb-5">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="1"
-          last-number
-        ></b-pagination>
-      </b-col>
     </b-row>
+
+    <b-button
+      @click="scrollToTop()"
+      v-if="showScrollUp"
+      pill
+      variant="success"
+      class="btn-scroll-top"
+    >
+      <font-awesome-icon icon="arrow-up" />
+    </b-button>
   </main>
 </template>
 
 <script>
+import movie from "@/domains/movie";
 import MovieDetail from "./MovieDetail";
 import { mapGetters } from "vuex";
 
@@ -36,43 +39,47 @@ export default {
     emptyMovies() {
       return this.movies.length == 0;
     },
+    showScrollUp() {
+      return this.movies.length > 20;
+    },
   },
   watch: {
     currentPage() {
       this.scrollToTop();
+    },
+    rankGenres() {
       this.loadMovies();
     },
   },
   data() {
     return {
-      currentPage: 1,
-      rows: 2,
       movies: [],
     };
   },
   methods: {
     loadMovies() {
-      this.$loading(true);
-      
-      const rdGenre = this.rankGenres[Math.floor(Math.random() * 3)][0];
-      let movies = this.watchlist.filter((watch) =>{
-        const genre_ids = watch.genre_ids
-        return genre_ids.includes(parseInt(rdGenre))
-      });
+      let movies = [];
+      const maxPostion = 3; // count until 3º rank
 
-      const rdMovie = movies[Math.floor(Math.random(),  movies.length - 1)];
-      const movieId = rdMovie.id;
+      for (let i = 0; i < this.rankGenres.length; i++) {
+        if (i > maxPostion) {
+          break;
+        }
 
-      this.$http
-        .get(
-          `https://api.themoviedb.org/3/movie/${movieId}/recommendations?page=${this.currentPage}&api_key=40d26954d2e35216b139b80e5f442fef&language=pt-BR`
-        )
-        .then((response) => (this.movies = response.data.results))
+        const genre = this.rankGenres[i];
+        let filtered = this.watchlist.filter((watch) => {
+          let genre_ids = watch.genre_ids;
+          return genre_ids.includes(parseInt(genre));
+        });
+
+        movies = movies.concat(filtered);
+      }
+
+      movie
+        .listAdvancedRecommendations(movies)
+        .then((response) => (this.movies = response.movies))
         .catch(() =>
-          this.$toast(
-            this.$t("msg_error_listing_movies"),
-            "warning"
-          )
+          this.$toast(this.$t("msg_error_listing_movies"), "warning")
         )
         .finally(() => this.$loading(false));
     },
@@ -81,12 +88,9 @@ export default {
         if (window.pageYOffset === 0) {
           clearInterval(this.interval);
         }
-        window.scroll(0, window.pageYOffset - 50);
-      }, 20);
+        window.scroll(0, window.pageYOffset - 100);
+      }, 10);
     },
-  },
-  mounted() {
-    // this.loadMovies();
   },
 };
 </script>
