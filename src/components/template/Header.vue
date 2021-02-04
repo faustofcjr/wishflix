@@ -10,7 +10,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown :text="$t('language')" right>
+          <!-- <b-nav-item-dropdown :text="$t('language')" right>
             <b-dropdown-item
               v-for="lang of languages"
               :key="lang.key"
@@ -19,7 +19,7 @@
               <font-awesome-icon icon="check" v-show="lang.key === language" />
               {{ $t(lang.value) }}
             </b-dropdown-item>
-          </b-nav-item-dropdown>
+          </b-nav-item-dropdown> -->
 
           <b-nav-item-dropdown right v-if="user">
             <template #button-content>
@@ -67,7 +67,7 @@ export default {
           this.logout();
           this.$router.push({ name: "signin" });
         })
-        .catch(() => this.$toast(this.$t("msg_error_user_signout"), "warning"));
+        .catch(() => this.$toast(this.$t("msg_error_user_signout"), "danger"));
     },
   },
 };

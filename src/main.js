@@ -19,11 +19,10 @@ import i18n from './i18n'
 
 Vue.config.productionTip = false
 
-
-Vue.prototype.$toast = function (title, message, variant) {
+Vue.prototype.$toast = function (message, variant) {
   this.$root.$bvToast.toast(message, {
-    title: title,
-    variant: variant,
+    title: this.$t(variant),
+    variant,
     solid: true,
     toaster: 'b-toaster-top-right',
   });

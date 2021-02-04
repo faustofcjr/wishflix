@@ -73,7 +73,7 @@ export default {
 
       watchlist
         .addToWatchlist(movie, this.profile)
-        .catch(() => this.$toast(this.$t("msg_error_add_movie_watchlist", "warning")));
+        .catch(() => this.$toast(this.$t("msg_error_add_movie_watchlist", "danger")));
     },
     watchAgain() {
       this.UpdateWatched(false);
@@ -84,7 +84,7 @@ export default {
     UpdateWatched(watched) {
       watchlist
         .updateWatchlist(this.watchlistId, { watched })
-        .catch(() => this.$toast(this.$t("msg_error_update_movie_watchlist", "warning")));
+        .catch(() => this.$toast(this.$t("msg_error_update_movie_watchlist", "danger")));
     },
     getImage() {
       const path = this.movie.poster_path

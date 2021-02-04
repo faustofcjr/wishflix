@@ -63,12 +63,12 @@
           autocomplete="password"
         ></b-form-input>
       </b-form-group>
-
-      <b-button type="submit" variant="success">
-        {{ $t("register") }}
-      </b-button>
-      <b-button type="reset" variant="danger" class="ml-2">
+     
+      <b-button type="reset" variant="danger" >
         {{ $t("cancel") }}
+      </b-button>
+       <b-button type="submit" variant="success ml-2">
+        {{ $t("register") }}
       </b-button>
     </b-form>
 
@@ -127,7 +127,7 @@ export default {
               .catch(() => this.showUnexpectedMessage());
           } else {
             let message = this.$t("msg_signup_email_registered");
-            this.$toast(message, "warning");
+            this.$toast(message, "danger");
           }
         })
         .catch(() => this.showUnexpectedMessage())
@@ -135,7 +135,7 @@ export default {
     },
     showUnexpectedMessage() {
       let message = this.$t("msg_error_signin");
-      this.$toast(message, "warning");
+      this.$toast(message, "danger");
     },
     onCancel(event) {
       event.preventDefault();
@@ -145,6 +145,7 @@ export default {
       this.$router.go(-1);
     },
   },
+  mounted() {}
 };
 </script>
 

@@ -79,7 +79,7 @@ export default {
         .listAdvancedRecommendations(movies)
         .then((response) => (this.movies = response.movies))
         .catch(() =>
-          this.$toast(this.$t("msg_error_listing_movies"), "warning")
+          this.$toast(this.$t("msg_error_listing_movies"), "danger")
         )
         .finally(() => this.$loading(false));
     },

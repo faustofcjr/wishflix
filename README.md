@@ -19,8 +19,6 @@ Note: We can use either solution to run this project in development environment 
 
 Get the code by either cloning this repository using git.
 
-Eg:
-
 ```bash
 git clone https://github.com/faustofcjr/wishflix.git
 ```
@@ -33,7 +31,6 @@ In the command prompt, go to project's root directory and follow one of the step
 
 ```bash
 npm install
-npm run serve
 ```
 
 **Compiles and hot-reloads for development:**

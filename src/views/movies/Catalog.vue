@@ -72,7 +72,7 @@ export default {
       movie
         .listPopular(this.currentPage)
         .then((response) => (this.movies = response.data.results))
-        .catch(() => this.$toast(this.$t("msg_error_listing_movies"), "warning"))
+        .catch(() => this.$toast(this.$t("msg_error_listing_movies"), "danger"))
         .finally(() => this.$loading(false));
     },
     search() {
@@ -82,7 +82,7 @@ export default {
       this.$loading(true);
       movie
         .search(this.searchTerm).then((response) => this.movies = response.data.results)
-        .catch(() => this.$toast(this.$t("msg_error_searching_movies"), "warning"))
+        .catch(() => this.$toast(this.$t("msg_error_searching_movies"), "danger"))
         .finally(() => this.$loading(false));
     },
     scrollToTop() {

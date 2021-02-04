@@ -112,7 +112,7 @@ export default {
         .addProfile(this.currentUser.id, this.form.name)
         .then((response) => this.profiles.push(response.profile))
         .catch(() =>
-          this.$toast(this.$t("msg_error_adding_profiles"), "warning")
+          this.$toast(this.$t("msg_error_adding_profiles"), "danger")
         )
         .finally(() => this.$loading(false));
     },
@@ -127,7 +127,7 @@ export default {
           this.profiles.splice(index, 1);
         })
         .catch(() =>
-          this.$toast(this.$t("msg_error_deleting_profiles"), "warning")
+          this.$toast(this.$t("msg_error_deleting_profiles"), "danger")
         )
         .finally(() => this.$loading(false));
     },
@@ -140,7 +140,7 @@ export default {
           this.profiles = this.currentUser.profiles;
         })
         .catch(() =>
-          this.$toast(this.$t("msg_error_listing_profiles"), "warning")
+          this.$toast(this.$t("msg_error_listing_profiles"), "danger")
         )
         .finally(() => this.$loading(false));
     },
