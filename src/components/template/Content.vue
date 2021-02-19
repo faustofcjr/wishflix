@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="out-in">
-    <b-container fluid="sm">
+    <b-container fluid="md">
       <router-view />
     </b-container>
   </transition>

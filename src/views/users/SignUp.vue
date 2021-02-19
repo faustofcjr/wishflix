@@ -63,11 +63,11 @@
           autocomplete="password"
         ></b-form-input>
       </b-form-group>
-     
-      <b-button type="reset"  id="cancel" variant="danger" >
+
+      <b-button type="reset" id="cancel" variant="danger">
         {{ $t("cancel") }}
       </b-button>
-       <b-button type="submit" id="register" variant="success ml-2">
+      <b-button type="submit" id="register" variant="success ml-2">
         {{ $t("register") }}
       </b-button>
     </b-form>
